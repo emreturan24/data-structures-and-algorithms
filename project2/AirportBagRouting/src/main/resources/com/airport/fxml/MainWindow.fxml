@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.airport.ui.MainWindowController" prefWidth="1400" prefHeight="850">
+
+    <!-- Sol Sidebar -->
+    <left>
+        <VBox id="sidebar">
+            <Label id="sidebar-logo" text="✈ AirportRouter" />
+            <Label id="sidebar-subtitle" text="BAGAJ YÖNETİM SİSTEMİ" />
+
+            <VBox spacing="5" style="-fx-padding: 10 0 0 0;">
+                <Button fx:id="navDashboard" text="📊  Dashboard" styleClass="nav-btn" onAction="#onNavDashboard"/>
+                <Button fx:id="navFlights" text="✈   Uçuş Takvimi" styleClass="nav-btn" onAction="#onNavFlights"/>
+                <Button fx:id="navBaggage" text="🧳  Bagaj Yönetimi" styleClass="nav-btn" onAction="#onNavBaggage"/>
+                <Button fx:id="navSecurity" text="🔒  Güvenlik Denetimi" styleClass="nav-btn" onAction="#onNavSecurity"/>
+                <Button fx:id="navRoute" text="🗺  Rota Haritası" styleClass="nav-btn" onAction="#onNavRoute"/>
+                <Button fx:id="navStack" text="📦  Yükleme Simülasyonu" styleClass="nav-btn" onAction="#onNavStack"/>
+                <Button fx:id="navCapacity" text="⚡  Kapasite Yönetimi" styleClass="nav-btn" onAction="#onNavCapacity"/>
+            </VBox>
+
+            <Pane VBox.vgrow="ALWAYS" />
+            <Label text="v1.0.0 Alpha" style="-fx-text-fill: -text-muted; -fx-padding: 20; -fx-font-size: 10px;" />
+        </VBox>
+    </left>
+
+    <!-- Üst Bar ve Dinamik İçerik Alanı -->
+    <center>
+        <VBox>
+            <!-- Top Bar -->
+            <HBox id="top-bar" alignment="CENTER_LEFT">
+                <Label fx:id="pageTitleLabel" id="page-title" text="Dashboard" />
+                <Pane HBox.hgrow="ALWAYS" />
+                <Label fx:id="clockLabel" id="clock-label" text="00:00:00" />
+                <Pane prefWidth="20" />
+                <Circle fx:id="statusDot" id="status-dot" radius="4" />
+                <Label fx:id="statusLabel" text="Sistem Çevrimiçi" style="-fx-text-fill: -text-secondary; -fx-padding: 0 0 0 8; -fx-font-size: 12px;"/>
+            </HBox>
+
+            <!-- Diğer ekranların içine yükleneceği alan (Kaydırılabilir) -->
+            <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                <StackPane fx:id="contentArea" />
+            </ScrollPane>
+        </VBox>
+    </center>
+</BorderPane>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<HBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.airport.ui.RouteController"
+      spacing="18" maxWidth="Infinity" maxHeight="Infinity">
+
+    <!-- Sol: Graf canvas -->
+    <VBox styleClass="card" HBox.hgrow="ALWAYS" spacing="12">
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="ROTA HARİTASI" styleClass="label-section" />
+            <Pane HBox.hgrow="ALWAYS" />
+            <Button text="🔄 Haritayı Sıfırla" styleClass="btn-ghost" onAction="#onReset"/>
+        </HBox>
+
+        <!-- Graf çizim alanı (Pane — node'lar ve kenarlar programatik eklenir) -->
+        <Pane fx:id="graphPane" id="route-canvas-pane"
+              VBox.vgrow="ALWAYS" minHeight="400" />
+
+        <!-- Animasyon status -->
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label fx:id="animStatusLabel" text=""
+                   style="-fx-text-fill:-accent-cyan; -fx-font-size:12px;" />
+        </HBox>
+    </VBox>
+
+    <!-- Sağ: Rota sorgulama -->
+    <VBox spacing="16" minWidth="280" maxWidth="300">
+
+        <!-- BFS Kısa Rota -->
+        <VBox styleClass="card" spacing="12">
+            <Label text="EN KISA ROTA (BFS)" styleClass="label-section" />
+            <Separator />
+            <Label text="Kaynak" style="-fx-text-fill:#7a8fa8; -fx-font-size:11px;" />
+            <ComboBox fx:id="fromCombo" promptText="Kaynak havaalanı..." maxWidth="Infinity" />
+            <Label text="Hedef" style="-fx-text-fill:#7a8fa8; -fx-font-size:11px;" />
+            <ComboBox fx:id="toCombo"   promptText="Hedef havaalanı..."  maxWidth="Infinity" />
+            <Button text="▶  Rotayı Bul &amp; Animasyon"
+                    styleClass="btn-primary" maxWidth="Infinity" onAction="#onFindShortestRoute" />
+            <Label fx:id="bfsResult" text="" wrapText="true"
+                   style="-fx-text-fill:-accent-green; -fx-font-size:12px;" />
+        </VBox>
+
+        <!-- DFS Tüm Rotalar -->
+        <VBox styleClass="card" spacing="12">
+            <Label text="TÜM ROTALAR (DFS)" styleClass="label-section" />
+            <Separator />
+            <Button text="🔍  Tüm Rotaları Tara" styleClass="btn-ghost"
+                    maxWidth="Infinity" onAction="#onFindAllRoutes" />
+            <ListView fx:id="allRoutesList" prefHeight="160" />
+        </VBox>
+
+        <!-- Aktarma Bilgisi -->
+        <VBox styleClass="card" spacing="10">
+            <Label text="AKTARMA ANALİZİ" styleClass="label-section" />
+            <Label fx:id="transferLabel" text="—"
+                   style="-fx-text-fill:-accent-amber; -fx-font-size:14px;" wrapText="true" />
+            <Label fx:id="reachableLabel" text=""
+                   style="-fx-font-size:12px;" />
+        </VBox>
+
+        <!-- Bağlantılı Havaalanları -->
+        <VBox styleClass="card" spacing="10" VBox.vgrow="ALWAYS">
+            <Label text="BAĞLANTI" styleClass="label-section" />
+            <ListView fx:id="neighborList" prefHeight="100" VBox.vgrow="ALWAYS" />
+        </VBox>
+    </VBox>
+
+</HBox>

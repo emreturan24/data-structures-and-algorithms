@@ -1,0 +1,542 @@
+/* ═══════════════════════════════════════════════════════════════════
+   PARS AMS — Dark Airport Theme
+   Renk paleti: Navy-Charcoal zemin + Cyan/Amber vurgu + Red alarm
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Root değişkenleri ─────────────────────────────────────────────── */
+.root {
+    /* Arka plan katmanları */
+    -bg-deep:        #080c14;
+    -bg-base:        #0d1117;
+    -bg-card:        #131a26;
+    -bg-surface:     #1a2336;
+    -bg-hover:       #1e2d44;
+    -bg-selected:    #213352;
+
+    /* Vurgu renkleri */
+    -accent-cyan:    #00d4ff;
+    -accent-blue:    #1a7fff;
+    -accent-green:   #00e5a0;
+    -accent-amber:   #ffb830;
+    -accent-red:     #ff3b5c;
+    -accent-purple:  #9d5cff;
+
+    /* Metin */
+    -text-primary:   #e8eef8;
+    -text-secondary: #7a8fa8;
+    -text-muted:     #3d5068;
+    -text-accent:    #00d4ff;
+
+    /* Kenarlık */
+    -border-subtle:  #1e3050;
+    -border-active:  #00d4ff44;
+    -border-glow:    #00d4ff88;
+
+    /* Yazı tipi */
+    -fx-font-family: "Segoe UI", "SF Pro Display", system;
+
+    -fx-background-color: -bg-base;
+    -fx-text-fill: -text-primary;
+}
+
+/* ── Genel arka plan ───────────────────────────────────────────────── */
+.pane, .anchor-pane, .scroll-pane, .split-pane {
+    -fx-background-color: transparent;
+}
+.border-pane {
+    -fx-background-color: -bg-base;
+}
+
+/* ── Scrollbar ─────────────────────────────────────────────────────── */
+.scroll-bar {
+    -fx-background-color: -bg-deep;
+}
+.scroll-bar .thumb {
+    -fx-background-color: -bg-hover;
+    -fx-background-radius: 4px;
+}
+.scroll-bar .thumb:hover {
+    -fx-background-color: -accent-cyan;
+}
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: -bg-deep;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   SIDEBAR
+   ══════════════════════════════════════════════════════════════════ */
+#sidebar {
+    -fx-background-color: -bg-deep;
+    -fx-border-color: transparent -border-subtle transparent transparent;
+    -fx-border-width: 0 1 0 0;
+    -fx-min-width: 220px;
+    -fx-max-width: 220px;
+}
+#sidebar-logo {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -accent-cyan;
+    -fx-padding: 24 20 10 20;
+}
+#sidebar-subtitle {
+    -fx-font-size: 10px;
+    -fx-text-fill: -text-muted;
+    -fx-padding: 0 20 20 20;
+    -fx-letter-spacing: 2px;
+}
+
+/* Kenar çubuğu butonları */
+.nav-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 13px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 12 20 12 20;
+    -fx-cursor: hand;
+    -fx-pref-width: 220px;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0;
+}
+.nav-btn:hover {
+    -fx-background-color: -bg-hover;
+    -fx-text-fill: -text-primary;
+}
+.nav-btn.active {
+    -fx-background-color: -bg-selected;
+    -fx-text-fill: -accent-cyan;
+    -fx-border-color: transparent transparent transparent -accent-cyan;
+    -fx-border-width: 0 0 0 3;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   TOP BAR
+   ══════════════════════════════════════════════════════════════════ */
+#top-bar {
+    -fx-background-color: -bg-deep;
+    -fx-border-color: transparent transparent -border-subtle transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 0 24 0 24;
+    -fx-pref-height: 56px;
+    -fx-min-height: 56px;
+}
+#page-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text-primary;
+}
+#clock-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: -accent-cyan;
+    -fx-font-family: "Consolas", monospace;
+}
+#status-dot {
+    -fx-fill: -accent-green;
+    -fx-radius: 5px;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   KARTLAR
+   ══════════════════════════════════════════════════════════════════ */
+.card {
+    -fx-background-color: -bg-card;
+    -fx-background-radius: 12px;
+    -fx-border-color: -border-subtle;
+    -fx-border-radius: 12px;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 14, 0, 0, 4);
+    -fx-padding: 18 20 18 20;
+}
+.card:hover {
+    -fx-border-color: -border-glow;
+    -fx-effect: dropshadow(gaussian, rgba(0,212,255,0.12), 22, 0, 0, 0);
+}
+.card-title {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text-secondary;
+    -fx-letter-spacing: 1.5px;
+}
+.card-value {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text-primary;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   BUTONLAR
+   ══════════════════════════════════════════════════════════════════ */
+.btn-primary {
+    -fx-background-color: linear-gradient(to right, #1a7fff, #00d4ff);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 9 22 9 22;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,212,255,0.35), 10, 0, 0, 2);
+}
+.btn-primary:hover {
+    -fx-background-color: linear-gradient(to right, #2488ff, #22dfff);
+    -fx-effect: dropshadow(gaussian, rgba(0,212,255,0.55), 16, 0, 0, 2);
+}
+.btn-danger {
+    -fx-background-color: linear-gradient(to right, #c0213a, #ff3b5c);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 9 22 9 22;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(255,59,92,0.35), 10, 0, 0, 2);
+}
+.btn-danger:hover {
+    -fx-background-color: linear-gradient(to right, #d62540, #ff5572);
+}
+.btn-success {
+    -fx-background-color: linear-gradient(to right, #00a870, #00e5a0);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 9 22 9 22;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+}
+.btn-success:hover {
+    -fx-background-color: linear-gradient(to right, #00bf80, #22ffb5);
+}
+.btn-amber {
+    -fx-background-color: linear-gradient(to right, #e09000, #ffb830);
+    -fx-text-fill: #1a1000;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 9 22 9 22;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+}
+.btn-ghost {
+    -fx-background-color: transparent;
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 13px;
+    -fx-padding: 8 16 8 16;
+    -fx-background-radius: 8px;
+    -fx-border-color: -border-subtle;
+    -fx-border-radius: 8px;
+    -fx-cursor: hand;
+}
+.btn-ghost:hover {
+    -fx-background-color: -bg-hover;
+    -fx-text-fill: -text-primary;
+    -fx-border-color: -accent-cyan;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   TABLOLAR
+   ══════════════════════════════════════════════════════════════════ */
+.table-view {
+    -fx-background-color: -bg-card;
+    -fx-table-cell-border-color: transparent;
+    -fx-border-color: -border-subtle;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+.table-view .column-header {
+    -fx-background-color: -bg-deep;
+    -fx-border-color: transparent transparent -border-subtle transparent;
+    -fx-border-width: 0 0 1 0;
+}
+.table-view .column-header-background {
+    -fx-background-color: -bg-deep;
+}
+.table-view .column-header .label {
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+.table-row-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent -border-subtle transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-text-fill: -text-primary;
+}
+.table-row-cell:hover {
+    -fx-background-color: -bg-hover;
+    -fx-cursor: hand;
+}
+.table-row-cell:selected {
+    -fx-background-color: -bg-selected;
+}
+.table-row-cell .table-cell {
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 13px;
+    -fx-padding: 8 12 8 12;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   LIST VIEW
+   ══════════════════════════════════════════════════════════════════ */
+.list-view {
+    -fx-background-color: -bg-card;
+    -fx-border-color: -border-subtle;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 13px;
+    -fx-padding: 10 14 10 14;
+    -fx-border-color: transparent transparent -border-subtle transparent;
+    -fx-border-width: 0 0 1 0;
+}
+.list-cell:hover {
+    -fx-background-color: -bg-hover;
+}
+.list-cell:selected {
+    -fx-background-color: -bg-selected;
+    -fx-text-fill: -accent-cyan;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   TEXT FIELD / COMBO
+   ══════════════════════════════════════════════════════════════════ */
+.text-field, .combo-box, .text-area {
+    -fx-background-color: -bg-surface;
+    -fx-text-fill: -text-primary;
+    -fx-border-color: -border-subtle;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8 14 8 14;
+    -fx-font-size: 13px;
+    -fx-prompt-text-fill: -text-muted;
+}
+.text-field:focused, .combo-box:focused, .text-area:focused {
+    -fx-border-color: -accent-cyan;
+    -fx-effect: dropshadow(gaussian, rgba(0,212,255,0.2), 8, 0, 0, 0);
+}
+.combo-box .list-cell {
+    -fx-background-color: -bg-surface;
+    -fx-text-fill: -text-primary;
+}
+.combo-box-popup .list-view {
+    -fx-background-color: -bg-surface;
+    -fx-border-color: -accent-cyan;
+}
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: -bg-hover;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   ETIKETLER
+   ══════════════════════════════════════════════════════════════════ */
+.label { -fx-text-fill: -text-primary; }
+.label-secondary { -fx-text-fill: -text-secondary; }
+.label-accent    { -fx-text-fill: -accent-cyan; }
+.label-amber     { -fx-text-fill: -accent-amber; }
+.label-green     { -fx-text-fill: -accent-green; }
+.label-red       { -fx-text-fill: -accent-red; }
+.label-heading {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text-primary;
+}
+.label-section {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text-secondary;
+    -fx-letter-spacing: 1.5px;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   BADGE / CHIP
+   ══════════════════════════════════════════════════════════════════ */
+.badge-vip {
+    -fx-background-color: rgba(157,92,255,0.2);
+    -fx-text-fill: #c580ff;
+    -fx-background-radius: 6px;
+    -fx-padding: 2 8 2 8;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-border-color: rgba(157,92,255,0.4);
+    -fx-border-radius: 6px;
+}
+.badge-business {
+    -fx-background-color: rgba(0,212,255,0.15);
+    -fx-text-fill: -accent-cyan;
+    -fx-background-radius: 6px;
+    -fx-padding: 2 8 2 8;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-border-color: rgba(0,212,255,0.35);
+    -fx-border-radius: 6px;
+}
+.badge-economy {
+    -fx-background-color: rgba(122,143,168,0.15);
+    -fx-text-fill: -text-secondary;
+    -fx-background-radius: 6px;
+    -fx-padding: 2 8 2 8;
+    -fx-font-size: 11px;
+    -fx-border-color: rgba(122,143,168,0.3);
+    -fx-border-radius: 6px;
+}
+.badge-danger {
+    -fx-background-color: rgba(255,59,92,0.2);
+    -fx-text-fill: -accent-red;
+    -fx-background-radius: 6px;
+    -fx-padding: 2 8 2 8;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-border-color: rgba(255,59,92,0.5);
+    -fx-border-radius: 6px;
+}
+.badge-ok {
+    -fx-background-color: rgba(0,229,160,0.15);
+    -fx-text-fill: -accent-green;
+    -fx-background-radius: 6px;
+    -fx-padding: 2 8 2 8;
+    -fx-font-size: 11px;
+    -fx-border-color: rgba(0,229,160,0.35);
+    -fx-border-radius: 6px;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   AYIRICI / SEPARATOR
+   ══════════════════════════════════════════════════════════════════ */
+.separator .line {
+    -fx-background-color: -border-subtle;
+    -fx-border-color: -border-subtle;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   PROGRESS BAR
+   ══════════════════════════════════════════════════════════════════ */
+.progress-bar {
+    -fx-background-color: -bg-surface;
+    -fx-background-radius: 4px;
+}
+.progress-bar .bar {
+    -fx-background-color: linear-gradient(to right, #1a7fff, #00d4ff);
+    -fx-background-radius: 4px;
+}
+.progress-bar.danger .bar {
+    -fx-background-color: linear-gradient(to right, #c0213a, #ff3b5c);
+}
+.progress-bar.warning .bar {
+    -fx-background-color: linear-gradient(to right, #e09000, #ffb830);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   GÜVENLİK UYARI OVERLAY
+   ══════════════════════════════════════════════════════════════════ */
+#security-overlay {
+    -fx-background-color: rgba(0,0,0,0.72);
+}
+#security-alert-card {
+    -fx-background-color: #120408;
+    -fx-background-radius: 16px;
+    -fx-border-color: -accent-red;
+    -fx-border-radius: 16px;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(255,59,92,0.6), 40, 0, 0, 0);
+    -fx-padding: 32 40 32 40;
+    -fx-max-width: 520px;
+}
+#alert-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -accent-red;
+}
+#alert-body {
+    -fx-font-size: 14px;
+    -fx-text-fill: -text-primary;
+    -fx-text-alignment: center;
+    -fx-wrap-text: true;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   ROTA GRAFİĞİ (Canvas alanı)
+   ══════════════════════════════════════════════════════════════════ */
+#route-canvas-pane {
+    -fx-background-color: linear-gradient(to bottom, #080c14, #0d1825);
+    -fx-background-radius: 12px;
+    -fx-border-color: -border-subtle;
+    -fx-border-radius: 12px;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   STACK VİZÜALİZASYON
+   ══════════════════════════════════════════════════════════════════ */
+.stack-item-card {
+    -fx-background-color: -bg-card;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-padding: 10 16 10 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 2);
+    -fx-cursor: hand;
+}
+.stack-item-card.vip    { -fx-border-color: rgba(157,92,255,0.6); }
+.stack-item-card.business { -fx-border-color: rgba(0,212,255,0.5); }
+.stack-item-card.economy  { -fx-border-color: -border-subtle; }
+.stack-item-card.danger   { -fx-border-color: rgba(255,59,92,0.7); }
+
+#stack-container {
+    -fx-background-color: linear-gradient(to bottom, #0a1220, #101a2a);
+    -fx-background-radius: 12px;
+    -fx-border-color: -border-subtle;
+    -fx-border-radius: 12px;
+    -fx-padding: 14;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   TAB PANE (gizlenmiş — özel tab bar için)
+   ══════════════════════════════════════════════════════════════════ */
+.tab-pane .tab-header-area { -fx-padding: 0; }
+.tab-pane .tab-header-background { -fx-background-color: transparent; }
+.tab-pane .tab {
+    -fx-background-color: -bg-surface;
+    -fx-text-fill: -text-secondary;
+}
+.tab-pane .tab:selected {
+    -fx-background-color: -bg-selected;
+    -fx-text-fill: -accent-cyan;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   TOOLTIP
+   ══════════════════════════════════════════════════════════════════ */
+.tooltip {
+    -fx-background-color: -bg-deep;
+    -fx-text-fill: -text-primary;
+    -fx-border-color: -border-subtle;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-font-size: 12px;
+    -fx-padding: 6 12 6 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 2);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   DIALOG
+   ══════════════════════════════════════════════════════════════════ */
+.dialog-pane {
+    -fx-background-color: -bg-card;
+    -fx-border-color: -border-subtle;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+}
+.dialog-pane .content { -fx-text-fill: -text-primary; }
+.dialog-pane .header-panel { -fx-background-color: -bg-deep; }
+
+/* ══════════════════════════════════════════════════════════════════
+   SPINNER / LOADING
+   ══════════════════════════════════════════════════════════════════ */
+.spinner-arc {
+    -fx-stroke: -accent-cyan;
+    -fx-stroke-width: 3;
+    -fx-fill: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}

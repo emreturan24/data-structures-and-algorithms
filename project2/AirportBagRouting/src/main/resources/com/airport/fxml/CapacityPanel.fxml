@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.airport.ui.CapacityController" spacing="20" style="-fx-padding: 20;" VBox.vgrow="ALWAYS">
+
+    <!-- Üst Kontrol ve Özet Paneli -->
+    <HBox spacing="20" styleClass="card" alignment="CENTER_LEFT">
+        <VBox spacing="8" minWidth="250">
+            <Label text="HEDEF UÇUŞ SEÇİMİ" styleClass="label-section"/>
+            <ComboBox fx:id="flightCombo" promptText="Yüklenecek Uçuşu Seçin..." prefWidth="250" />
+            <Label fx:id="resultLabel" text="Durum: Bekleniyor" style="-fx-text-fill: -text-secondary; -fx-font-size: 11px;" />
+        </VBox>
+
+        <Separator orientation="VERTICAL" />
+
+        <VBox spacing="5" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT">
+                <Label text="Anlık Uçuş Kapasitesi" styleClass="label-section" />
+                <Pane HBox.hgrow="ALWAYS" />
+                <Label fx:id="capacityPctLabel" text="0 / 0 kg (0.0 %)" style="-fx-font-weight: bold; -fx-text-fill: -text-primary;" />
+            </HBox>
+            <ProgressBar fx:id="capacityBar" progress="0.0" prefWidth="9999" prefHeight="10" />
+            <HBox>
+                <Label fx:id="summaryLabel" text="Kargoda: 0 | Beklemede: 0" style="-fx-text-fill: -text-muted; -fx-font-size: 11px;" />
+                <Pane HBox.hgrow="ALWAYS" />
+                <Label fx:id="remainingLabel" text="Kalan: 0 kg" style="-fx-text-fill: -accent-cyan; -fx-font-size: 11px;" />
+            </HBox>
+        </VBox>
+
+        <Separator orientation="VERTICAL" />
+
+        <!-- minWidth="280" vererek orta alanın burayı ezmesini yasaklıyoruz -->
+        <VBox spacing="10" alignment="CENTER_RIGHT" minWidth="280" prefWidth="320">
+
+            <!-- maxWidth="Infinity" ile butonun VBox'un %100'ünü kaplamasını sağlıyoruz -->
+            <Button text="⚡ Otomatik Yükle (Kapasite)" styleClass="btn-primary" onAction="#onLoadWithCapacity" maxWidth="Infinity" />
+
+            <Button text="↗ Bekleyenleri Ata (Sıradaki Uçuşa)" styleClass="btn-ghost" onAction="#onAssignWaiting" maxWidth="Infinity" />
+
+        </VBox>
+    </HBox>
+
+    <!-- Alt Kısım: Tablo ve Listeler -->
+    <HBox spacing="20" VBox.vgrow="ALWAYS">
+
+        <!-- Sol: Kargoya Yüklenenler -->
+        <VBox spacing="10" styleClass="card" HBox.hgrow="ALWAYS" prefWidth="600">
+            <HBox alignment="CENTER_LEFT">
+                <Circle radius="4" fill="#00e5a0" />
+                <Label text=" UÇAĞA YÜKLENEN BAGAJLAR" styleClass="label-section" />
+                <Pane HBox.hgrow="ALWAYS" />
+                <Label fx:id="loadedCount" text="0" style="-fx-font-weight: bold; -fx-text-fill: #00e5a0;" />
+                <Label text=" bagaj" style="-fx-text-fill: -text-muted;" />
+            </HBox>
+
+            <TableView fx:id="loadedTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="lColId" text="BAGAJ ID" prefWidth="100"/>
+                    <TableColumn fx:id="lColPass" text="YOLCU" prefWidth="80"/>
+                    <TableColumn fx:id="lColWt" text="AĞIRLIK" prefWidth="80"/>
+                    <TableColumn fx:id="lColClass" text="SINIF" prefWidth="90"/>
+                    <TableColumn fx:id="lColStat" text="DURUM" prefWidth="120"/>
+                </columns>
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+            </TableView>
+        </VBox>
+
+        <!-- Sağ: Bekleme Kuyruğu ve Tüm Uçuşların Kapasiteleri -->
+        <VBox spacing="20" prefWidth="350">
+
+            <!-- Sağ Üst: Diğer Uçuşlar -->
+            <VBox spacing="10" styleClass="card" VBox.vgrow="ALWAYS">
+                <Label text="DİĞER UÇUŞ KAPASİTELERİ" styleClass="label-section" />
+                <ListView fx:id="flightCapacityList" VBox.vgrow="ALWAYS" />
+            </VBox>
+
+            <!-- Sağ Alt: Taşma (Waiting) Kuyruğu -->
+            <VBox spacing="10" styleClass="card" VBox.vgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT">
+                    <Circle radius="4" fill="#ffb830" />
+                    <Label text=" BEKLEME KUYRUĞU (FIFO)" styleClass="label-section" />
+                    <Pane HBox.hgrow="ALWAYS" />
+                    <Label fx:id="waitingCount" text="0" style="-fx-font-weight: bold; -fx-text-fill: #ffb830;" />
+                </HBox>
+                <ListView fx:id="waitingQueueView" VBox.vgrow="ALWAYS" />
+                <Label fx:id="waitingWeightLabel" text="Toplam bekleyen: 0.0 kg" style="-fx-text-fill: -text-muted; -fx-font-size: 11px;" alignment="CENTER_RIGHT" maxWidth="Infinity"/>
+            </VBox>
+        </VBox>
+
+    </HBox>
+</VBox>

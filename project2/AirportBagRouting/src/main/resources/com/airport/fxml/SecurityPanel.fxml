@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.airport.ui.SecurityController" alignment="CENTER">
+    <!-- Ana İçerik -->
+    <HBox spacing="20" style="-fx-padding: 20;" HBox.hgrow="ALWAYS">
+        <!-- Sol: Tarama Alanı -->
+        <VBox spacing="15" HBox.hgrow="ALWAYS">
+            <HBox spacing="15" alignment="CENTER_LEFT" styleClass="card">
+                <ComboBox fx:id="flightCombo" promptText="Taranacak Uçuşu Seçin..." prefWidth="250" />
+                <Button text="Güvenlik Taramasını Başlat" styleClass="btn-primary" onAction="#onScreenFlight" />
+                <Pane HBox.hgrow="ALWAYS" />
+                <Label fx:id="screeningCount" text="0 bagaj" style="-fx-text-fill: -text-muted;" />
+            </HBox>
+            <VBox styleClass="card" VBox.vgrow="ALWAYS" spacing="10">
+                <HBox><Label fx:id="statsLabel" text="Tarama bekleniyor..." style="-fx-text-fill:-text-secondary; -fx-font-size:12px;" /></HBox>
+                <TableView fx:id="screeningTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="sColId" text="ID" prefWidth="90" />
+                        <TableColumn fx:id="sColPass" text="YOLCU" prefWidth="80" />
+                        <TableColumn fx:id="sColWt" text="AĞIRLIK" prefWidth="70" />
+                        <TableColumn fx:id="sColClass" text="SINIF" prefWidth="80" />
+                        <TableColumn fx:id="sColResult" text="SONUÇ" prefWidth="120" />
+                    </columns>
+                    <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
+                </TableView>
+                <Button text="Seçili Bagajı Manuel İşaretle" styleClass="btn-danger" onAction="#onManualFlag" maxWidth="Infinity" />
+            </VBox>
+        </VBox>
+        <!-- Sağ: Karantina Havuzu -->
+        <VBox spacing="15" minWidth="320" maxWidth="320">
+            <VBox styleClass="card" VBox.vgrow="ALWAYS" spacing="12">
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="GÜVENLİK HAVUZU" styleClass="label-section" />
+                    <Pane HBox.hgrow="ALWAYS" />
+                    <Label fx:id="poolCount" text="0" style="-fx-font-weight:bold; -fx-text-fill:-accent-red;" />
+                </HBox>
+                <ComboBox fx:id="categoryFilter" promptText="Kategori Filtresi" maxWidth="Infinity" />
+                <ListView fx:id="poolList" VBox.vgrow="ALWAYS" />
+                <HBox spacing="10">
+                    <Button text="Havuzdan Temizle" styleClass="btn-success" onAction="#onClearSelected" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+                    <Button text="Rapor" styleClass="btn-ghost" onAction="#onReport" />
+                </HBox>
+            </VBox>
+        </VBox>
+    </HBox>
+
+    <!-- Overlay Alert (Otomatik Görünür Olacak) -->
+    <StackPane fx:id="securityOverlay" visible="false" managed="false" style="-fx-background-color: rgba(0,0,0,0.8);">
+        <VBox fx:id="securityOverlay_card" id="security-alert-card" spacing="20" alignment="CENTER" maxWidth="450" maxHeight="250">
+            <Label id="alert-title" text="⚠ TEHLİKELİ MADDE TESPİTİ" />
+            <Label id="alert-body" text="Tarama sırasında şüpheli bir bagaj tespit edildi ve otomatik olarak Güvenlik Havuzuna alındı." wrapText="true" />
+            <Label fx:id="alertBaggageInfo" text="—" style="-fx-font-size:16px; -fx-text-fill:-text-primary; -fx-font-weight:bold;" />
+            <HBox spacing="15" alignment="CENTER">
+                <Button text="Havuza Ekle &amp; Kapat" styleClass="btn-danger" onAction="#onAddToPool" />
+                <Button text="Yanlış Alarm (İptal)" styleClass="btn-ghost" onAction="#onDismissAlert" />
+            </HBox>
+        </VBox>
+    </StackPane>
+</StackPane>
