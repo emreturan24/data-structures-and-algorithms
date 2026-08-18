@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+    SecurityPanel.fxml — Güvenlik Denetimi
+
+    TOOLTIP MİMARİSİ (v2 — Dashboard ile aynı):
+      FXML içindeki <tooltip> blokları tamamen kaldırıldı.
+      Tooltip kurulumu SecurityController.setupTooltips() → installStableTooltip() ile yapılır.
+
+      installStableTooltip() davranışı:
+        - Mouse TOOLTIP_HOVER_DELAY_SECONDS saniye hareketsiz kalırsa tooltip açılır.
+        - Mouse hareket etmeye başlar başlamaz tooltip anında kapanır (titreme yok).
+        - Mouse bileşeni terk ederse timer iptal edilir, tooltip kapanır.
+        - Aynı anda yalnızca bir tooltip açık kalır.
+
+    fx:id eklenenler (tooltip kurulumu için):
+      screenBtn             — "Güvenlik Taramasını Başlat"
+      screeningResultsLabel — "TARAMA SONUÇLARI" başlık etiketi
+      manualFlagBtn         — "Seçili Bagajı Manuel İşaretle"
+      poolHeaderLabel       — "GÜVENLİK HAVUZU" başlık etiketi
+      clearBtn              — "Havuzdan Temizle"
+      (flightCombo zaten mevcut)
+-->
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.airport.ui.SecurityController"
+           alignment="CENTER">
+
+    <!-- ═══════════════════════════════════════
+         ANA İÇERİK
+    ═══════════════════════════════════════ -->
+    <HBox spacing="20" style="-fx-padding: 20;" HBox.hgrow="ALWAYS">
+
+        <!-- ─────────────────────────────────────────
+             SOL — Tarama Alanı
+        ───────────────────────────────────────── -->
+        <VBox spacing="15" HBox.hgrow="ALWAYS">
+
+            <!-- Üst kontrol satırı -->
+            <HBox spacing="15" alignment="CENTER_LEFT" styleClass="card">
+
+                <ComboBox fx:id="flightCombo"
+                          promptText="Taranacak Uçuşu Seçin..."
+                          prefWidth="250" />
+
+                <Button fx:id="screenBtn"
+                        text="Güvenlik Taramasını Başlat"
+                        styleClass="btn-primary"
+                        onAction="#onScreenFlight" />
+
+                <Pane HBox.hgrow="ALWAYS" />
+
+                <Label fx:id="screeningCount"
+                       text="0 bagaj"
+                       style="-fx-text-fill: -text-muted;" />
+
+            </HBox>
+
+            <!-- Tarama sonuçları kartı -->
+            <VBox styleClass="card" VBox.vgrow="ALWAYS" spacing="10">
+
+                <HBox alignment="CENTER_LEFT">
+                    <!--
+                        Tooltip bu section başlığına bağlı (controller'da installStableTooltip).
+                        Tablo satırlarına değil, sadece bu başlık ve sütun header'larına
+                        (controller'da Java ile makeHeaderLabel) tooltip eklenir.
+                    -->
+                    <Label fx:id="screeningResultsLabel"
+                           text="TARAMA SONUÇLARI" styleClass="label-section"
+                           maxWidth="Infinity" HBox.hgrow="ALWAYS" />
+                </HBox>
+
+                <HBox>
+                    <Label fx:id="statsLabel"
+                           text="Tarama bekleniyor..."
+                           style="-fx-text-fill:-text-secondary; -fx-font-size:12px;" />
+                </HBox>
+
+                <!--
+                    text="" — sütun başlık metinleri controller'da Label graphic olarak
+                    ekleniyor (makeHeaderLabel), bu sayede tooltip sadece header'da çalışır,
+                    veri satırlarında çalışmaz.
+                -->
+                <TableView fx:id="screeningTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="sColId"     prefWidth="90" />
+                        <TableColumn fx:id="sColPass"   prefWidth="80" />
+                        <TableColumn fx:id="sColWt"     prefWidth="70" />
+                        <TableColumn fx:id="sColClass"  prefWidth="80" />
+                        <TableColumn fx:id="sColResult" prefWidth="120" />
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
+                </TableView>
+
+                <Button fx:id="manualFlagBtn"
+                        text="Seçili Bagajı Manuel İşaretle"
+                        styleClass="btn-danger"
+                        onAction="#onManualFlag"
+                        maxWidth="Infinity" />
+
+            </VBox>
+        </VBox>
+
+        <!-- ─────────────────────────────────────────
+             SAĞ — Karantina Havuzu
+        ───────────────────────────────────────── -->
+        <VBox spacing="15" minWidth="320" maxWidth="320">
+            <VBox styleClass="card" VBox.vgrow="ALWAYS" spacing="12">
+
+                <HBox alignment="CENTER_LEFT">
+                    <Label fx:id="poolHeaderLabel"
+                           text="GÜVENLİK HAVUZU" styleClass="label-section"
+                           maxWidth="Infinity" HBox.hgrow="ALWAYS" />
+                    <Pane HBox.hgrow="ALWAYS" />
+                    <Label fx:id="poolCount"
+                           text="0"
+                           style="-fx-font-weight:bold; -fx-text-fill:-accent-red;" />
+                </HBox>
+
+                <ComboBox fx:id="categoryFilter"
+                          promptText="Kategori Filtresi"
+                          maxWidth="Infinity" />
+
+                <ListView fx:id="poolList" VBox.vgrow="ALWAYS" />
+
+                <HBox spacing="10">
+                    <Button fx:id="clearBtn"
+                            text="Havuzdan Temizle"
+                            styleClass="btn-success"
+                            onAction="#onClearSelected"
+                            HBox.hgrow="ALWAYS"
+                            maxWidth="Infinity" />
+
+                    <Button text="Rapor"
+                            styleClass="btn-ghost"
+                            onAction="#onReport" />
+                </HBox>
+
+            </VBox>
+        </VBox>
+    </HBox>
+
+    <!-- ═══════════════════════════════════════
+         OVERLAY — Tehlikeli Madde Tespiti
+    ═══════════════════════════════════════ -->
+    <StackPane fx:id="securityOverlay"
+               visible="false" managed="false"
+               style="-fx-background-color: rgba(0,0,0,0.8);">
+        <VBox fx:id="securityOverlay_card"
+              id="security-alert-card"
+              spacing="20" alignment="CENTER"
+              maxWidth="450" maxHeight="250">
+
+            <Label id="alert-title" text="⚠ TEHLİKELİ MADDE TESPİTİ" />
+            <Label id="alert-body"
+                   text="Tarama sırasında şüpheli bir bagaj tespit edildi ve otomatik olarak Güvenlik Havuzuna alındı."
+                   wrapText="true" />
+            <Label fx:id="alertBaggageInfo"
+                   text="—"
+                   style="-fx-font-size:16px; -fx-text-fill:-text-primary; -fx-font-weight:bold;" />
+
+            <HBox spacing="15" alignment="CENTER">
+                <Button text="Havuza Ekle &amp; Kapat"
+                        styleClass="btn-danger"
+                        onAction="#onAddToPool" />
+                <Button text="Yanlış Alarm (İptal)"
+                        styleClass="btn-ghost"
+                        onAction="#onDismissAlert" />
+            </HBox>
+        </VBox>
+    </StackPane>
+
+</StackPane>

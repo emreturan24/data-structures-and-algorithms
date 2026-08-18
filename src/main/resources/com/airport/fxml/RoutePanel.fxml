@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<!--
+    RoutePanel.fxml — Rota Haritası
+
+    TOOLTIP MİMARİSİ (v2 — Dashboard ile aynı):
+      FXML içindeki <tooltip> blokları tamamen kaldırıldı.
+      Tooltip kurulumu RouteController.setupTooltips() → installStableTooltip() ile yapılır.
+
+      installStableTooltip() davranışı:
+        - Mouse TOOLTIP_HOVER_DELAY_SECONDS saniye hareketsiz kalırsa tooltip açılır.
+        - Mouse hareket eder etmez tooltip kapanır (titreme yok).
+        - Aynı anda yalnızca bir tooltip açık kalır.
+
+    NOT: Graf canvas düğümlerine (Circle) ait Tooltip.install() çağrıları
+         controller'da drawNode() içinde aynen korunmaktadır.
+         Circle, Region değil Shape olduğundan installStableTooltip() uygulanamaz.
+
+    fx:id eklenenler (tooltip kurulumu için):
+      resetBtn              — "Haritayı Sıfırla"
+      bfsHeaderLabel        — "EN KISA ROTA (BFS)" başlık
+      fromLabel             — "Kaynak" etiket
+      toLabel               — "Hedef" etiket
+      findRouteBtn          — "Rotayı Bul & Animasyon"
+      dfsHeaderLabel        — "TÜM ROTALAR (DFS)" başlık
+      findAllBtn            — "Tüm Rotaları Tara"
+      transferHeaderLabel   — "AKTARMA ANALİZİ" başlık
+      connectionHeaderLabel — "BAĞLANTI" başlık
+      (fromCombo, toCombo, bfsResult, allRoutesList,
+       animStatusLabel, transferLabel, reachableLabel,
+       neighborList zaten mevcut)
+-->
+<HBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.airport.ui.RouteController"
+      spacing="18"
+      maxWidth="Infinity"
+      maxHeight="Infinity">
+
+    <!-- ═══════════════════════════════════════════════
+         SOL — Graf canvas
+    ═══════════════════════════════════════════════ -->
+    <VBox styleClass="card"
+          HBox.hgrow="ALWAYS"
+          maxHeight="Infinity"
+          spacing="12">
+
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="ROTA HARİTASI" styleClass="label-section" />
+            <Pane HBox.hgrow="ALWAYS" />
+            <Button fx:id="resetBtn"
+                    text="🔄 Haritayı Sıfırla"
+                    styleClass="btn-ghost"
+                    onAction="#onReset" />
+        </HBox>
+
+        <Pane fx:id="graphPane" id="route-canvas-pane"
+              VBox.vgrow="ALWAYS" minHeight="400" />
+
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label fx:id="animStatusLabel" text=""
+                   style="-fx-text-fill:-accent-cyan; -fx-font-size:12px;" />
+        </HBox>
+    </VBox>
+
+    <!-- ═══════════════════════════════════════════════
+         SAĞ — Bağımsız kaydırılabilir kontroller
+    ═══════════════════════════════════════════════ -->
+    <ScrollPane minWidth="300" prefWidth="300" maxWidth="300"
+                maxHeight="Infinity"
+                fitToWidth="true"
+                hbarPolicy="NEVER"
+                vbarPolicy="AS_NEEDED"
+                style="-fx-background-color:transparent; -fx-background:transparent;
+                       -fx-border-color:transparent;">
+        <VBox spacing="16" prefWidth="284">
+            <padding><Insets top="0" right="4" bottom="8" left="0"/></padding>
+
+            <!-- ─────────────────────────────────────────
+                 BFS — En Kısa Rota
+            ───────────────────────────────────────── -->
+            <VBox styleClass="card" spacing="12">
+
+                <Label fx:id="bfsHeaderLabel"
+                       text="EN KISA ROTA (BFS)" styleClass="label-section"
+                       maxWidth="Infinity" />
+
+                <Separator />
+
+                <Label fx:id="fromLabel"
+                       text="Kaynak"
+                       style="-fx-text-fill:#7a8fa8; -fx-font-size:11px;" />
+
+                <HBox spacing="15" alignment="CENTER_LEFT">
+                    <RadioButton fx:id="bfsRadio" text="En Az Aktarma (BFS)" />
+                    <RadioButton fx:id="dijkstraRadio" text="En Kısa Mesafe (Dijkstra)" />
+                </HBox>
+
+                <ComboBox fx:id="fromCombo"
+                          promptText="Kaynak havaalanı..."
+                          maxWidth="Infinity" />
+
+                <Label fx:id="toLabel"
+                       text="Hedef"
+                       style="-fx-text-fill:#7a8fa8; -fx-font-size:11px;" />
+
+                <ComboBox fx:id="toCombo"
+                          promptText="Hedef havaalanı..."
+                          maxWidth="Infinity" />
+
+                <Button fx:id="findRouteBtn"
+                        text="▶  Rotayı Bul &amp; Animasyon"
+                        styleClass="btn-primary" maxWidth="Infinity"
+                        onAction="#onFindShortestRoute" />
+
+                <!-- Bulunan rotanın metin gösterimi -->
+                <Label fx:id="bfsResult"
+                       text="" wrapText="true"
+                       style="-fx-text-fill:-accent-green; -fx-font-size:12px;" />
+
+            </VBox>
+
+            <!-- ─────────────────────────────────────────
+                 DFS — Tüm Rotalar
+            ───────────────────────────────────────── -->
+            <VBox styleClass="card" spacing="12">
+
+                <Label fx:id="dfsHeaderLabel"
+                       text="TÜM ROTALAR (DFS)" styleClass="label-section"
+                       maxWidth="Infinity" />
+
+                <Separator />
+
+                <Button fx:id="findAllBtn"
+                        text="🔍  Tüm Rotaları Tara"
+                        styleClass="btn-ghost"
+                        maxWidth="Infinity"
+                        onAction="#onFindAllRoutes" />
+
+                <ListView fx:id="allRoutesList" prefHeight="280" />
+
+            </VBox>
+
+            <!-- ─────────────────────────────────────────
+                 Aktarma Analizi
+            ───────────────────────────────────────── -->
+            <VBox styleClass="card" spacing="10">
+
+                <Label fx:id="transferHeaderLabel"
+                       text="AKTARMA ANALİZİ" styleClass="label-section"
+                       maxWidth="Infinity" />
+
+                <!-- Aktarma sayısı ve direkt uçuş bilgisi -->
+                <Label fx:id="transferLabel"
+                       text="—"
+                       style="-fx-text-fill:-accent-amber; -fx-font-size:14px;"
+                       wrapText="true" />
+
+                <!-- Ulaşılabilirlik durumu -->
+                <Label fx:id="reachableLabel"
+                       text=""
+                       style="-fx-font-size:12px;" />
+
+            </VBox>
+
+            <!-- ─────────────────────────────────────────
+                 Bağlantı
+            ───────────────────────────────────────── -->
+            <VBox styleClass="card" spacing="10">
+
+                <Label fx:id="connectionHeaderLabel"
+                       text="BAĞLANTI" styleClass="label-section"
+                       maxWidth="Infinity" />
+
+                <ListView fx:id="neighborList" prefHeight="280" />
+
+            </VBox>
+
+        </VBox>
+    </ScrollPane>
+
+</HBox>

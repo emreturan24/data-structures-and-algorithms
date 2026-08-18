@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+
+<!--
+    CapacityPanel.fxml — Kapasite & Simülasyon Paneli
+    DEĞİŞİKLİKLER:
+      - simLogLabel Bekleme Kuyruğu kartından çıkarıldı
+      - simLogLabel panelin alt kısmına tam genişlikte status bar olarak eklendi
+      - emptyAircraftBtn "UÇAKTAKİ BAGAJLAR" listesinin altında
+      - autoLoadHint Bekleme Kuyruğu kartında küçük ipucu olarak kaldı
+-->
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.airport.ui.CapacityController"
+      spacing="15" style="-fx-padding: 20;" VBox.vgrow="ALWAYS">
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         ÜST — Uçuş Seçimi + Kapasite Barı + Sıfırla
+    ═══════════════════════════════════════════════════════════════ -->
+    <HBox spacing="15" alignment="CENTER_LEFT" styleClass="card">
+
+        <VBox spacing="5">
+            <Label text="UÇUŞ" styleClass="label-section" />
+            <ComboBox fx:id="flightCombo" promptText="Uçuş seçin..." prefWidth="200" />
+        </VBox>
+
+        <Separator orientation="VERTICAL" />
+
+        <VBox spacing="5" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT">
+                <Label text="KAPASİTE DOLULUK" styleClass="label-section" />
+                <Pane HBox.hgrow="ALWAYS" />
+                <Label fx:id="capacityPctLabel" text="0 / 0 kg (0%)"
+                       style="-fx-font-weight:bold; -fx-text-fill:-text-primary;" />
+            </HBox>
+            <ProgressBar fx:id="capacityBar" progress="0" prefHeight="10" maxWidth="Infinity" />
+            <Label fx:id="remainingLabel" text="Kalan: 0 kg"
+                   style="-fx-text-fill:-accent-cyan;" />
+        </VBox>
+
+        <Separator orientation="VERTICAL" />
+
+        <Button fx:id="resetBtn"
+                text="↺ Sıfırla"
+                styleClass="btn-danger"
+                onAction="#onReset"
+                prefWidth="110" />
+    </HBox>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         ORTA — Üç Liste (Yüke Hazır | Uçaktaki | Bekleme Kuyruğu)
+    ═══════════════════════════════════════════════════════════════ -->
+    <HBox spacing="15" VBox.vgrow="ALWAYS">
+
+        <!-- ── 1. Yüke Hazır ─────────────────────────────────────── -->
+        <VBox spacing="8" styleClass="card" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="6">
+                <Circle radius="4" fill="#00d4ff" />
+                <Label text="YÜKE HAZIR BAGAJLAR" styleClass="label-section" />
+            </HBox>
+            <Label text="CHECK_IN durumundaki bagajlar"
+                   style="-fx-text-fill:-text-muted; -fx-font-size:10px;" />
+
+            <ListView fx:id="readyListView" VBox.vgrow="ALWAYS" />
+
+            <Button text="Seçilileri Uçağa Yükle ➔"
+                    styleClass="btn-primary"
+                    onAction="#onManualLoad"
+                    maxWidth="Infinity" />
+        </VBox>
+
+        <!-- ── 2. Uçaktaki Bagajlar ──────────────────────────────── -->
+        <!--
+            loadedListView artık aircraftStack sırasını yansıtır:
+            - Listenin ÜSTÜ = stack tepesi = en son yüklenen = LIFO'da ilk çıkacak
+            - Listenin ALTI = stack dibi  = ilk yüklenen    = en son çıkacak
+        -->
+        <VBox spacing="8" styleClass="card" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="6">
+                <Circle radius="4" fill="#00e5a0" />
+                <Label text="UÇAKTAKİ BAGAJLAR" styleClass="label-section" />
+            </HBox>
+            <Label text="↑ Üst = son yüklenen (LIFO'da ilk çıkar)"
+                   style="-fx-text-fill:-text-muted; -fx-font-size:10px;" />
+
+            <ListView fx:id="loadedListView" VBox.vgrow="ALWAYS" />
+
+            <Button fx:id="emptyAircraftBtn"
+                    text="✈  Uçağı Boşalt (LIFO)"
+                    styleClass="btn-danger"
+                    onAction="#onEmptyAircraft"
+                    maxWidth="Infinity"
+                    disable="true" />
+        </VBox>
+
+        <!-- ── 3. Bekleme Kuyruğu ─────────────────────────────────
+             simLogLabel bu karttan çıkarıldı.
+             Kart genişliği artık log tarafından bozulmuyor.
+        ────────────────────────────────────────────────────────── -->
+        <VBox spacing="8" styleClass="card" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT">
+                <Circle radius="4" fill="#ffb830" />
+                <Label text=" BEKLEME KUYRUĞU" styleClass="label-section" />
+                <Pane HBox.hgrow="ALWAYS" />
+                <Label fx:id="waitingCountLabel" text="0"
+                       style="-fx-font-weight:bold; -fx-text-fill:#ffb830;" />
+            </HBox>
+            <Label text="Kapasiteden taşan bagajlar"
+                   style="-fx-text-fill:-text-muted; -fx-font-size:10px;" />
+
+            <ListView fx:id="waitingListView" VBox.vgrow="ALWAYS" />
+
+            <Button fx:id="autoLoadBtn"
+                    text="Hepsini Otomatik Yükle ⚡"
+                    styleClass="btn-ghost"
+                    onAction="#onAutoLoad"
+                    maxWidth="Infinity" />
+
+            <Label fx:id="autoLoadHint"
+                   text="VIP → Business → Economy  (adım adım yüklenir)"
+                   style="-fx-text-fill:-text-muted; -fx-font-size:10px;"
+                   wrapText="true" />
+        </VBox>
+
+    </HBox>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         ALT — Simülasyon / Boşaltma Log Status Bar
+         Sabit yükseklik, tek satır → üstteki kartları hiç etkilemez.
+         Yükleme ve boşaltma mesajları burada gösterilir.
+    ═══════════════════════════════════════════════════════════════ -->
+    <HBox styleClass="card" alignment="CENTER_LEFT" spacing="10"
+          style="-fx-padding: 8 12 8 12; -fx-min-height: 34; -fx-max-height: 34;">
+
+        <Label text="›" style="-fx-text-fill:-text-muted; -fx-font-size:13px;" />
+
+        <Label fx:id="simLogLabel"
+               text="Simülasyon bekleniyor..."
+               maxWidth="Infinity"
+               HBox.hgrow="ALWAYS"
+               style="-fx-font-size:11px; -fx-text-fill:-text-muted;"
+               wrapText="false" />
+
+    </HBox>
+
+</VBox>

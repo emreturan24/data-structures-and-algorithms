@@ -1,0 +1,7 @@
+# Bu dosyayı db.properties adıyla kopyalayıp kendi MySQL bilgilerinizi yazın:
+#   cp src/main/resources/db.properties.example src/main/resources/db.properties
+# db.properties .gitignore'da olduğu için repoya gönderilmez.
+
+db.url=jdbc:mysql://localhost:3306/airport_db?useSSL=false&serverTimezone=UTC
+db.user=root
+db.password=BURAYA_SIFRENIZI_YAZIN

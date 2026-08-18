@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.airport.ui.StackController"
+      spacing="20"
+      style="-fx-padding: 20;"
+      maxWidth="Infinity"
+      maxHeight="Infinity">
+
+    <!-- ════════════════════════════════════════
+         SOL — Stack görselleştirme alanı
+    ════════════════════════════════════════ -->
+    <VBox spacing="15" HBox.hgrow="ALWAYS" maxHeight="Infinity">
+
+        <!-- Uçuş seçimi + Yükleme butonu -->
+        <HBox spacing="15" alignment="CENTER_LEFT" styleClass="card">
+            <ComboBox fx:id="flightCombo"
+                      promptText="Simüle Edilecek Uçuş..." prefWidth="250" />
+
+            <Button fx:id="loadFlightBtn"
+                    text="✈ Uçağa Yükle (PQ → VIP Alta)"
+                    styleClass="btn-primary" onAction="#onLoadFlight" />
+
+            <Pane HBox.hgrow="ALWAYS" />
+
+            <Label fx:id="stackSizeLabel" text="Stack: 0 öğe"
+                   style="-fx-text-fill:-accent-purple; -fx-font-weight:bold;" />
+        </HBox>
+
+        <!-- Stack görsel alanı -->
+        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                    style="-fx-background-color:transparent; -fx-control-inner-background: transparent;">
+            <VBox fx:id="stackVisualBox" id="stack-container"
+                  spacing="5" minHeight="500" />
+        </ScrollPane>
+
+        <!-- Log mesajı -->
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label fx:id="logLabel" text="Simülasyon bekleniyor..."
+                   style="-fx-text-fill:-text-muted;" HBox.hgrow="ALWAYS"
+                   maxWidth="Infinity" wrapText="true"/>
+        </HBox>
+
+        <!-- ★ YENİ — Uçağı Boşalt butonu (stack'in hemen altında) -->
+        <Button fx:id="emptyAircraftBtn"
+                text="✈ Uçağı Boşalt (LIFO)"
+                styleClass="btn-danger"
+                onAction="#onEmptyAircraft"
+                maxWidth="Infinity" />
+
+    </VBox>
+
+    <!-- ════════════════════════════════════════
+         SAĞ — İstatistik ve kontrol paneli
+    ════════════════════════════════════════ -->
+    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                prefWidth="350" minWidth="350"
+                style="-fx-background-color: transparent; -fx-control-inner-background: transparent;">
+
+        <VBox spacing="20" style="-fx-padding: 0 10 10 0;">
+
+            <!-- Stack istatistikleri -->
+            <VBox styleClass="card" spacing="12">
+                <Label fx:id="stackStatsLabel"
+                       text="STACK İSTATİSTİĞİ" styleClass="label-section" />
+
+                <Label fx:id="infoFlight"  text="Uçuş: —"
+                       style="-fx-text-fill:-accent-cyan;" />
+                <Label fx:id="infoSize"    text="Öğe sayısı: 0" />
+                <Label fx:id="infoWeight"  text="Toplam ağırlık: 0 kg" />
+                <Separator />
+                <Label fx:id="infoTop"    text="Üstteki: —"
+                       style="-fx-font-size:11px;" />
+                <Label fx:id="infoBottom" text="Alttaki: —"
+                       style="-fx-font-size:11px;" />
+            </VBox>
+
+            <!-- LIFO boşaltma kontrolleri -->
+            <VBox styleClass="card" spacing="12">
+                <Label fx:id="lifoCtrlLabel"
+                       text="BOŞALTMA (LIFO) KONTROLLERİ" styleClass="label-section" />
+
+                <Button fx:id="unloadStepBtn"
+                        text="⬇ Tek Bagaj İndir (Pop)"
+                        styleClass="btn-amber" maxWidth="Infinity"
+                        onAction="#onUnloadStep" />
+
+                <Button fx:id="unloadAllBtn"
+                        text="⏬ Tümünü İndir (İniş)"
+                        styleClass="btn-success" maxWidth="Infinity"
+                        onAction="#onUnloadAll" />
+            </VBox>
+
+        </VBox>
+    </ScrollPane>
+</HBox>
+
